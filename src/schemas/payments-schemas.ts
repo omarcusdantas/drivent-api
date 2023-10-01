@@ -1,7 +1,13 @@
 import Joi from 'joi';
-import { PaymentBody } from '@/protocols';
+import { InputPaymentBody } from '@/protocols';
 
-export const paymentsSchema = Joi.object<PaymentBody>({
+export const paymentSchema = Joi.object<InputPaymentBody>({
   ticketId: Joi.number().required(),
-  cardData: Joi.object().required(),
+  cardData: {
+    issuer: Joi.string().required(),
+    number: Joi.string().required(),
+    name: Joi.string().required(),
+    expirationDate: Joi.string().required(),
+    cvv: Joi.string().required(),
+  },
 });
