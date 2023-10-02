@@ -121,7 +121,7 @@ describe('GET /hotels', () => {
       expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED);
     });
 
-    it('should respond with status 200 and with list of hotels', async () => {
+    it('should respond with status 200 and with hotel and rooms', async () => {
       const user = await createUser();
       const token = await generateValidToken(user);
       const enrollment = await createEnrollmentWithAddress(user);

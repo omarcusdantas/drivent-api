@@ -11,3 +11,4 @@ export * from './enrollment-not-found-error';
 export * from './invalid-cep-error';
 export * from './not-found-custom-message-error';
 export * from './unauthorized-custom-message-error';
+export * from './payment-required-custom-message-error';
