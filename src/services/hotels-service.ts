@@ -3,7 +3,7 @@ import { enrollmentRepository, ticketsRepository, hotelsRepository } from '@/rep
 
 async function getHotels(userId: number) {
   const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
-  if (!enrollment) throw notFoundCustomMessageError("User does not have enrollment");
+  if (!enrollment) throw notFoundCustomMessageError('User does not have enrollment');
 
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
   if (!ticket) throw notFoundCustomMessageError('User does not have ticket');
@@ -12,12 +12,27 @@ async function getHotels(userId: number) {
   if (hotels.length === 0) throw notFoundCustomMessageError('There are no hotels');
 
   if (ticket.status !== 'PAID') throw paymentRequiredCustomMessageError('Ticket is not paid');
-
   if (ticket.TicketType.isRemote === true) throw paymentRequiredCustomMessageError('Ticket is not remote');
-
   if (ticket.TicketType.includesHotel === false) throw paymentRequiredCustomMessageError('Ticket does not offer hotel');
 
   return hotels;
 }
 
-export const hotelsService = { getHotels };
+async function getHotelById(userId: number, hotelId: number) {
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+  if (!enrollment) throw notFoundCustomMessageError('User does not have enrollment');
+
+  const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
+  if (!ticket) throw notFoundCustomMessageError('User does not have ticket');
+
+  const hotel = await hotelsRepository.findHotelById(hotelId);
+  if (!hotel) throw notFoundCustomMessageError('Hotel not found');
+
+  if (ticket.status !== 'PAID') throw paymentRequiredCustomMessageError('Ticket is not paid');
+  if (ticket.TicketType.isRemote === true) throw paymentRequiredCustomMessageError('Ticket is not remote');
+  if (ticket.TicketType.includesHotel === false) throw paymentRequiredCustomMessageError('Ticket does not offer hotel');
+
+  return hotel;
+}
+
+export const hotelsService = { getHotels, getHotelById };
