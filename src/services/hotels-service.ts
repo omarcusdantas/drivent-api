@@ -7,13 +7,12 @@ async function getHotels(userId: number) {
 
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
   if (!ticket) throw notFoundCustomMessageError('User does not have ticket');
-
-  const hotels = await hotelsRepository.findHotels();
-  if (hotels.length === 0) throw notFoundCustomMessageError('There are no hotels');
-
   if (ticket.status !== 'PAID') throw paymentRequiredCustomMessageError('Ticket is not paid');
   if (ticket.TicketType.isRemote === true) throw paymentRequiredCustomMessageError('Ticket is not remote');
   if (ticket.TicketType.includesHotel === false) throw paymentRequiredCustomMessageError('Ticket does not offer hotel');
+
+  const hotels = await hotelsRepository.findHotels();
+  if (hotels.length === 0) throw notFoundCustomMessageError('There are no hotels');
 
   return hotels;
 }
@@ -24,13 +23,12 @@ async function getHotelById(userId: number, hotelId: number) {
 
   const ticket = await ticketsRepository.findTicketByEnrollmentId(enrollment.id);
   if (!ticket) throw notFoundCustomMessageError('User does not have ticket');
-
-  const hotel = await hotelsRepository.findHotelById(hotelId);
-  if (!hotel) throw notFoundCustomMessageError('Hotel not found');
-
   if (ticket.status !== 'PAID') throw paymentRequiredCustomMessageError('Ticket is not paid');
   if (ticket.TicketType.isRemote === true) throw paymentRequiredCustomMessageError('Ticket is not remote');
   if (ticket.TicketType.includesHotel === false) throw paymentRequiredCustomMessageError('Ticket does not offer hotel');
+
+  const hotel = await hotelsRepository.findHotelById(hotelId);
+  if (!hotel) throw notFoundCustomMessageError('Hotel not found');
 
   return hotel;
 }
