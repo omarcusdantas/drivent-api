@@ -27,7 +27,7 @@ export async function updateByBookingIdAndRoomId(bookingId: number, roomId: numb
   });
 }
 
-export const bookingsRepository = {
+export const bookingRepository = {
   findByUserId,
   create,
   updateByBookingIdAndRoomId,

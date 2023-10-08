@@ -1,8 +1,8 @@
 import { notFoundCustomMessageError, forbiddenCustomMessageError } from '@/errors';
-import { bookingsRepository, ticketsRepository, enrollmentRepository, hotelRepository } from '@/repositories';
+import { bookingRepository, ticketsRepository, enrollmentRepository, hotelRepository } from '@/repositories';
 
 async function getByUserId(userId: number) {
-  const booking = await bookingsRepository.findByUserId(userId);
+  const booking = await bookingRepository.findByUserId(userId);
   if (!booking) throw notFoundCustomMessageError('Booking not found');
   return booking;
 }
@@ -21,15 +21,15 @@ async function create(userId: number, roomId: number) {
   if (!room) throw notFoundCustomMessageError('Room not found');
   if (room.capacity === room._count.Booking) throw forbiddenCustomMessageError('Room is full');
 
-  const booking = await bookingsRepository.findByUserId(userId);
+  const booking = await bookingRepository.findByUserId(userId);
   if (booking) throw forbiddenCustomMessageError('User already has a booking');
 
-  const newBooking = await bookingsRepository.create(userId, roomId);
+  const newBooking = await bookingRepository.create(userId, roomId);
   return { bookingId: newBooking.id };
 }
 
 async function updateByBookingIdAndRoomId(userId: number, bookingId: number, roomId: number) {
-  const booking = await bookingsRepository.findByUserId(userId);
+  const booking = await bookingRepository.findByUserId(userId);
   if (!booking) throw forbiddenCustomMessageError('User does not have booking');
   if (booking.id !== bookingId) throw forbiddenCustomMessageError('Booking id does not match');
 
@@ -37,7 +37,7 @@ async function updateByBookingIdAndRoomId(userId: number, bookingId: number, roo
   if (!room) throw notFoundCustomMessageError('Room not found');
   if (room.capacity === room._count.Booking) throw forbiddenCustomMessageError('Room is full');
 
-  const updatedBooking = await bookingsRepository.updateByBookingIdAndRoomId(bookingId, roomId);
+  const updatedBooking = await bookingRepository.updateByBookingIdAndRoomId(bookingId, roomId);
   return { bookingId: updatedBooking.id };
 }
 
