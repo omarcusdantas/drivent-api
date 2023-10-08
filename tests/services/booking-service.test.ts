@@ -1,6 +1,6 @@
+import { TicketStatus } from '@prisma/client';
 import { bookingService } from '@/services';
 import { bookingRepository, hotelRepository, ticketsRepository, enrollmentRepository } from '@/repositories';
-import { TicketStatus } from '@prisma/client';
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -241,7 +241,7 @@ describe('create', () => {
 
     expect(promise).resolves.toEqual({
       bookingId: booking.id,
-    })
+    });
   });
 });
 
@@ -289,7 +289,7 @@ describe('updateBooking', () => {
     jest.spyOn(hotelRepository, 'findRoomWithBookingCountById').mockResolvedValueOnce(room);
 
     const promise = bookingService.updateByBookingIdAndRoomId(inputBooking.userId, booking.id + 1, inputBooking.roomId);
-    
+
     expect(promise).rejects.toEqual({
       name: 'forbiddenError',
       message: 'Booking id does not match',
@@ -318,7 +318,7 @@ describe('updateBooking', () => {
     });
 
     const promise = bookingService.updateByBookingIdAndRoomId(inputBooking.userId, booking.id, inputBooking.roomId);
-    
+
     expect(promise).rejects.toEqual({
       name: 'forbiddenError',
       message: 'Room is full',
