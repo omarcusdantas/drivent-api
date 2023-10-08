@@ -6,7 +6,8 @@ export async function createBooking(userId: number, roomId: number) {
       userId,
       roomId,
     },
-    include: {
+    select: {
+      id: true,
       Room: true,
     },
   });
