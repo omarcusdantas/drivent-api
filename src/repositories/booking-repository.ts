@@ -1,25 +1,34 @@
-import { Booking } from '@prisma/client';
 import { prisma } from '@/config';
 
-type ReadBooking = Omit<Booking, 'userId' | 'roomId' | 'createdAt' | 'updatedAt'>;
-
-async function findByUserId(userId: number): Promise<ReadBooking> {
+async function findByUserId(userId: number) {
   return prisma.booking.findFirst({
     where: { userId },
     select: { id: true, Room: true },
   });
 }
 
-export async function create(userId: number, roomId: number): Promise<Booking> {
+export async function create(userId: number, roomId: number) {
   return prisma.booking.create({
     data: {
       userId,
       roomId,
     },
-  })
+  });
+}
+
+export async function updateByBookingIdAndRoomId(bookingId: number, roomId: number) {
+  return prisma.booking.update({
+    where: {
+      id: bookingId,
+    },
+    data: {
+      roomId,
+    },
+  });
 }
 
 export const bookingsRepository = {
   findByUserId,
   create,
+  updateByBookingIdAndRoomId,
 };

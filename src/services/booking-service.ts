@@ -27,7 +27,21 @@ async function create(userId: number, roomId: number) {
   return { bookingId: newBooking.id };
 }
 
+async function updateByBookingIdAndRoomId(userId: number, bookingId: number, roomId: number) {
+  const booking = await getByUserId(userId);
+  if (!booking) throw notFoundCustomMessageError('Booking not found for user');
+  if (booking.id !== bookingId) throw forbiddenCustomMessageError('Booking id does not match');
+
+  const room = await hotelRepository.findRoomWithBookingCountById(roomId);
+  if (!room) throw notFoundCustomMessageError('Room not found');
+  if (room.capacity === room._count.Booking) throw forbiddenCustomMessageError('Room is full');
+
+  const updatedBooking = await bookingsRepository.updateByBookingIdAndRoomId(bookingId, roomId);
+  return { bookingId: updatedBooking.id };
+}
+
 export const bookingService = {
   getByUserId,
   create,
+  updateByBookingIdAndRoomId,
 };

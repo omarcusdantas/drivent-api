@@ -23,12 +23,12 @@ async function findRoomWithBookingCountById(roomId: number) {
     select: {
       capacity: true,
       _count: { select: { Booking: true } },
-    }
+    },
   });
 }
 
 export const hotelRepository = {
   findHotels,
   findRoomsByHotelId,
-  findRoomWithBookingCountById
+  findRoomWithBookingCountById,
 };
